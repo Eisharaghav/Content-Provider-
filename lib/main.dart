@@ -25,6 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List itemList = ["College", "Jobs", "Extras", "Courses","X","Y","Z","A"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,23 +51,25 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 10),
               Container(
-                height: 400,
                 child: GridView.count(
-                  scrollDirection: Axis.horizontal,
-                  crossAxisCount: 3,
-                  children: List.generate(12, (index) {
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  padding: EdgeInsets.all(10.0),
+                  childAspectRatio: 1.8,
+                  children: itemList.map((item) {
                     return Container(
                       child: Card(
                         elevation: 3.0,
                         color: Colors.white,
                         child: Container(
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(15.0),
                           child: Text(
-                            "SAP",
+                            item,
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -74,7 +77,43 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     );
-                  }),
+                  }).toList(),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(15),
+                child: Text(
+                  "Top Searched",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                child: GridView.count(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 1,
+                  padding: EdgeInsets.all(10.0),
+                  childAspectRatio: 0.45,
+                  children: itemList.map((item) {
+                    return Container(
+                      child: Card(
+                        elevation: 3.0,
+                        color: Colors.white,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            item,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ],
