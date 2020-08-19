@@ -1,126 +1,59 @@
+import 'package:InfoApp/pages/homepage.dart';
+import 'package:InfoApp/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-void main() {
-  runApp(MyApp());
+
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'New App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage(),
-    );
+class _MyAppState extends State<MyApp> {
+  var storage = FlutterSecureStorage();
+  bool isLogged = false;
+  bool doneLoading = false;
+
+  checkForLoggedInUser() async {
+    var _bool = await storage.read(key: 'isLogged');
+    var _email = await storage.read(key: 'email');
+    var _pass = await storage.read(key: 'pass');
+    if (_bool == 'true') {
+      print(_bool);
+      setState(() {
+        isLogged = true;
+      });
+    }
+    setState(() {
+      doneLoading = true;
+    });
   }
-}
 
-class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
-}
+  void initState() {
+    checkForLoggedInUser();
+    super.initState();
+  }
 
-class _HomePageState extends State<HomePage> {
-  List itemList = ["College", "Jobs", "Extras", "Courses","X","Y","Z","A"];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 5.0,
-        backgroundColor: Colors.white,
-        title: Text(
-          "Homepage",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        titleSpacing: 5.0,
-        leading: Icon(Icons.clear_all, color: Colors.black),
-        actions: <Widget>[
-          Icon(Icons.account_circle, color: Colors.black),
-          SizedBox(width: 10),
-          Icon(Icons.settings, color: Colors.black),
-          SizedBox(width: 10),
-        ],
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'cont',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 10),
-              Container(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  padding: EdgeInsets.all(10.0),
-                  childAspectRatio: 1.8,
-                  children: itemList.map((item) {
-                    return Container(
-                      child: Card(
-                        elevation: 3.0,
-                        color: Colors.white,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(15),
-                child: Text(
-                  "Top Searched",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Container(
-                height: 100,
-                child: GridView.count(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  crossAxisCount: 1,
-                  padding: EdgeInsets.all(10.0),
-                  childAspectRatio: 0.45,
-                  children: itemList.map((item) {
-                    return Container(
-                      child: Card(
-                        elevation: 3.0,
-                        color: Colors.white,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+//     home: doneLoading == true
+//         ? isLogged == false ? LoginPage() : BottomNavigation()
+//         : BottomNavigation(),
+      home: doneLoading == true ? isLogged == false ? LoginPage() : HomePage() : LoginPage(),
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
+      },
     );
   }
 }
