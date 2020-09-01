@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage>
                       child: Container(
                         width: 1500,
                         height: 1300,
-                       
+                       child: Image.asset("assets/eis.png"),
                       )),
                 ),
                 Padding(
