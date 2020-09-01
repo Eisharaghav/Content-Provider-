@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,11 +29,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final store = FirebaseStorage.instance;
+    final store = FirebaseStorage.instance;
     var storage = FlutterSecureStorage();
 
   final _auth = FirebaseAuth.instance;
-  List itemList = ["College", "Jobs", "Extras", "Courses","X","Y","Zl","A"];
+  List itemList = ["College", "Jobs", "Extras", "Courses"];
+  List subCat = ["SAP", "Dual Degree", "Scholarship Program", "Placements"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           Icon(Icons.account_circle, color: Colors.black),
           SizedBox(width: 10),
-          IconButton(icon: Icon(Icons.exit_to_app,color: Colors.red,), onPressed: () async {
+           IconButton(icon: Icon(Icons.exit_to_app,color: Colors.red,), onPressed: () async {
                                         await _auth.signOut();
                                         await storage.write(
                                             key: 'isLogged', value: 'false');
@@ -60,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                                             key: 'profileData', value: 'false');
         Navigator.pushReplacementNamed(context, '/login');
                                       }),
-          Icon(Icons.settings, color: Colors.black),
           SizedBox(width: 10),
         ],
       ),
@@ -69,7 +69,86 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 10),
+               Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 20.0),
+                child: Text(
+                  "Recent",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                height: 120,
+                child: GridView.count(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 1,
+                  padding: EdgeInsets.all(10.0),
+                  childAspectRatio: 0.5,
+                  children: itemList.map((item) {
+                    return Container(
+                      child: Card(
+                        elevation: 3.0,
+                        color: Colors.white,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            item,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 20.0),
+                child: Text(
+                  "Sub Categories",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  padding: EdgeInsets.all(10.0),
+                  childAspectRatio: 1.8,
+                  children: subCat.map((item) {
+                    return Container(
+                      child: Card(
+                        elevation: 3.0,
+                        color: Colors.white,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            item,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 20.0),
+                child: Text(
+                  "Categories",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
               Container(
                 child: GridView.count(
                   shrinkWrap: true,
@@ -99,7 +178,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: EdgeInsets.all(15),
                 child: Text(
-                  "Top Searched",
+                  "Most Searched",
                   style: TextStyle(
                     fontSize: 20,
                   ),
