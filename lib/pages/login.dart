@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../constants.dart';
+import 'package:InfoApp/style/theme.dart' as Theme;
+import 'package:InfoApp/utils/bubble_indication_painter.dart';
+import 'package:InfoApp/constants.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -101,10 +102,29 @@ class _LoginPageState extends State<LoginPage>
             height: MediaQuery.of(context).size.height >= 775.0
                 ? MediaQuery.of(context).size.height
                 : 775.0,
-            decoration: new BoxDecoration(),
+            decoration: new BoxDecoration(
+              gradient: new LinearGradient(
+                  colors: [
+                    Theme.Colors.loginGradientStart,
+                    Theme.Colors.loginGradientEnd
+                  ],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(1.0, 1.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
+                Expanded(
+                  child: Padding(
+                      padding: EdgeInsets.only(top: 75.0),
+                      child: Container(
+                        width: 1500,
+                        height: 1300,
+                       
+                      )),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
                   child: _buildMenuBar(context),
@@ -195,6 +215,7 @@ class _LoginPageState extends State<LoginPage>
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: CustomPaint(
+        painter: TabIndicationPainter(pageController: _pageController),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -340,17 +361,29 @@ class _LoginPageState extends State<LoginPage>
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
+                      color: Theme.Colors.loginGradientStart,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                     BoxShadow(
+                      color: Theme.Colors.loginGradientEnd,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                   ],
+                  gradient: new LinearGradient(
+                      colors: [
+                        Theme.Colors.loginGradientEnd,
+                        Theme.Colors.loginGradientStart
+                      ],
+                      begin: const FractionalOffset(0.2, 0.2),
+                      end: const FractionalOffset(1.0, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
                 ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
+                  splashColor: Theme.Colors.loginGradientEnd,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -704,17 +737,29 @@ class _LoginPageState extends State<LoginPage>
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
+                      color: Theme.Colors.loginGradientStart,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                     BoxShadow(
+                      color: Theme.Colors.loginGradientEnd,
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                   ],
+                  gradient: new LinearGradient(
+                      colors: [
+                        Theme.Colors.loginGradientEnd,
+                        Theme.Colors.loginGradientStart
+                      ],
+                      begin: const FractionalOffset(0.2, 0.2),
+                      end: const FractionalOffset(1.0, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
                 ),
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
+                    splashColor: Theme.Colors.loginGradientEnd,
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
