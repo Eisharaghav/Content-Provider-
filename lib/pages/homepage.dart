@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +30,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final store = FirebaseStorage.instance;
+    var storage = FlutterSecureStorage();
+
   final _auth = FirebaseAuth.instance;
   List itemList = ["College", "Jobs", "Extras", "Courses","X","Y","Zl","A"];
   @override
@@ -49,9 +52,13 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           Icon(Icons.account_circle, color: Colors.black),
           SizedBox(width: 10),
-          IconButton(icon: Icon(Icons.exit_to_app), onPressed: () async {
+          IconButton(icon: Icon(Icons.exit_to_app,color: Colors.red,), onPressed: () async {
                                         await _auth.signOut();
-
+                                        await storage.write(
+                                            key: 'isLogged', value: 'false');
+                                        await storage.write(
+                                            key: 'profileData', value: 'false');
+        Navigator.pushReplacementNamed(context, '/login');
                                       }),
           Icon(Icons.settings, color: Colors.black),
           SizedBox(width: 10),

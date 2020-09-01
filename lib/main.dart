@@ -2,11 +2,16 @@ import 'package:InfoApp/pages/homepage.dart';
 import 'package:InfoApp/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
 
-void main() => runApp(new MyApp());
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
