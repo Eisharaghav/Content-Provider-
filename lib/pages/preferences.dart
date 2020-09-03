@@ -82,7 +82,7 @@ class _PreferencesState extends State<Preferences> {
             child: FlatButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              // onPressed: ,
+              onPressed: () {},
               child: Text(
                 "Submit",
                 style: TextStyle(
