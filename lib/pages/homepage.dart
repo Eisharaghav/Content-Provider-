@@ -1,4 +1,5 @@
 
+import 'package:InfoApp/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 5.0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.teal,
         title: Text(
           "Homepage",
           style: TextStyle(
@@ -51,7 +52,9 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 5.0,
         leading: Icon(Icons.clear_all, color: Colors.black),
         actions: <Widget>[
-          Icon(Icons.account_circle, color: Colors.black),
+                   IconButton(icon: Icon(Icons.pregnant_woman,color: Colors.red,), onPressed: () async {
+        Navigator.pushNamed(context, '/preferences');
+                                      }),
           SizedBox(width: 10),
            IconButton(icon: Icon(Icons.exit_to_app,color: Colors.red,), onPressed: () async {
                                         await _auth.signOut();

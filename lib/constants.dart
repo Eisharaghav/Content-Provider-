@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFF6F35A5);
-const kPrimaryLightColor = Color(0xFFF1E6FF);
+const kPrimaryColor = Color(0xFF004D40);
+const kPrimaryLightColor = Color(0xFFB2DF2DB);
 
 void displayDialog(context, title, text) => showDialog(
   context: context,
