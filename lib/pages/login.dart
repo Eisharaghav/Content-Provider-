@@ -55,27 +55,22 @@ class _LoginPageState extends State<LoginPage>
   String _confirmpass;
   bool isSpinner = false;
   String error = '';
+  Size size;
 
-  createUser() async {
+   createUser() async {
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(
           email: _email, password: _pass);
       if (newUser != null) {
         await storage.write(key: 'isLogged', value: 'true');
         await addUser();
-        // Navigator.of(context).push(
-        //   MaterialPageRoute<Null>(
-        //     builder: (BuildContext context) {
-        //       return Homegym();
-        //     },
-        //   ),
-        // );
-        Navigator.pushReplacementNamed(context, '/hash');
+        Navigator.pushReplacementNamed(context, '/home');
       } else {
         displayDialog(context, 'Error', 'Some error occured.');
       }
     } catch (e) {
-      displayDialog(context, 'Error', 'Some error occured.');
+      displayDialog(context, 'Error',
+          'The email address is already in use by another account.');
       print(e);
     }
   }
@@ -90,6 +85,7 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return new Scaffold(
       // key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -120,7 +116,7 @@ class _LoginPageState extends State<LoginPage>
                   child: Padding(
                       padding: EdgeInsets.only(top: 75.0),
                       child: Container(
-                        width: 1500,
+                        width: size.width,
                         height: 1300,
                        child: Image.asset("assets/eis.png"),
                       )),
@@ -359,6 +355,7 @@ class _LoginPageState extends State<LoginPage>
                 margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ///[box shadow]
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Theme.Colors.loginGradientStart,
@@ -408,13 +405,7 @@ class _LoginPageState extends State<LoginPage>
                           email: _email, password: _pass);
                       if (user != null) {
                         await storage.write(key: 'isLogged', value: 'true');
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute<Null>(
-                        //     builder: (BuildContext context) {
-                        //       return Homegym();
-                        //     },
-                        //   ),
-                        // );
+                      
                         Navigator.pushReplacementNamed(context, '/home');
                       } else {
                         setState(() {
@@ -427,8 +418,41 @@ class _LoginPageState extends State<LoginPage>
                       setState(() {
                         isSpinner = false;
                       });
-                      displayDialog(context, 'Error', 'Some error occured.');
-                      print(e);
+                      switch (e.code) {
+                              case "ERROR_INVALID_EMAIL":
+                                displayDialog(context, 'Error',
+                                    'Your email address appears to be malformed.');
+                                break;
+                              case "ERROR_WRONG_PASSWORD":
+                                displayDialog(context, 'Error',
+                                    'Your password is wrong.');
+
+                                break;
+                              case "ERROR_USER_NOT_FOUND":
+                                displayDialog(context, 'Error',
+                                    'User with this email doesn\'t exist.');
+
+                                break;
+                              case "ERROR_USER_DISABLED":
+                                displayDialog(context, 'Error',
+                                    'User with this email has been disabled.');
+
+                                break;
+                              case "ERROR_TOO_MANY_REQUESTS":
+                                displayDialog(context, 'Error',
+                                    'Too many requests. Try again later.');
+
+                                break;
+                              case "ERROR_OPERATION_NOT_ALLOWED":
+                                displayDialog(context, 'Error',
+                                    'Signing in with Email and Password is not enabled.');
+
+                                break;
+                              default:
+                                displayDialog(context, 'Error',
+                                    'An undefined Error happened.');
+                            }
+                            print(e);
                     }
                   },
                 ),
@@ -568,6 +592,7 @@ class _LoginPageState extends State<LoginPage>
                           padding: EdgeInsets.only(
                               top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                           child: TextFormField(
+                            textInputAction: TextInputAction.next,
                             focusNode: myFocusNodeName,
                             controller: signupNameController,
                             keyboardType: TextInputType.text,
@@ -588,7 +613,7 @@ class _LoginPageState extends State<LoginPage>
                                   fontSize: 16.0),
                             ),
                             validator: (val) =>
-                                val.isEmpty ? "name to bta de bhai" : null,
+                                val.isEmpty ? "Name Please" : null,
                             onChanged: (value) {
                               setState(() {
                                 _name = value;
@@ -624,7 +649,7 @@ class _LoginPageState extends State<LoginPage>
                                   fontSize: 16.0),
                             ),
                             validator: (val) =>
-                                val.isEmpty ? "email daal de bhai" : null,
+                               ( val.isEmpty || !val.contains('.com') ) ? "Correct Email Please" : null,
                             onChanged: (value) {
                               setState(() {
                                 _email = value;
@@ -782,7 +807,7 @@ class _LoginPageState extends State<LoginPage>
                         );
                         print('inside');
                         await createUser();
-                        await addUser();
+                        // await addUser();
                         setState(
                           () {
                             isSpinner = false;
