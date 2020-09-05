@@ -53,9 +53,7 @@ class _MyAppState extends State<MyApp> {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-//     home: doneLoading == true
-//         ? isLogged == false ? LoginPage() : BottomNavigation()
-//         : BottomNavigation(),
+
       home: doneLoading == true ? isLogged == false ? LoginPage() : HomePage() : LoginPage(),
       routes: {
         '/login': (context) => LoginPage(),

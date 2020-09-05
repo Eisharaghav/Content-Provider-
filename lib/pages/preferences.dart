@@ -1,22 +1,15 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:async/async.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:dio/dio.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'preferences',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: Preferences(),
-    );
-  }
-}
+FirebaseUser loggedInUser;
 
 class Preferences extends StatefulWidget {
   @override
@@ -24,6 +17,12 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
+    final _fireStore = FirebaseFirestore.instance;
+  final store = FirebaseStorage.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+  var storage = FlutterSecureStorage();
+  Timer timer;
+
   int tag = 1;
   List<String> tags = [];
 
@@ -42,10 +41,68 @@ class _PreferencesState extends State<Preferences> {
     'Science',
   ];
 
-  String user;
+  // String user;
   final usersMemoizer = AsyncMemoizer<List<ChipsChoiceOption<String>>>();
 
   @override
+   initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 10), (timer) async {
+      // print('timer called');
+      this.getCurrentUser();
+    });
+  }
+
+  
+  Future<void> update() async {
+    setState(() {});
+    // ignore: unused_local_variable
+    var response = _fireStore
+        .collection('users')
+        .document(loggedInUser.email)
+        .updateData({
+      'tags': tags.toString(),
+    });
+  }
+
+  Future<void> getCurrentUser() async {
+
+    try {
+     var user = _auth.currentUser;
+      if (user != null) {
+        setState(() {
+          loggedInUser = user;
+        });
+            print(loggedInUser);
+
+        print('document');
+        var document = await _fireStore
+            .collection('users')
+            .document(loggedInUser.email)
+            .get()
+            .then((value) {
+          setState(() {
+            // tags = value.data['tags'];
+
+            print('still working');
+          });
+        });
+        await storage.write(key: 'tags', value: '$tags');
+    
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  //   addUser() async {
+  //   var response =
+  //       await _fireStore.collection('users').document('$_email').setData({
+  //     'tags': tags,
+   
+  //   });
+  // }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +139,10 @@ class _PreferencesState extends State<Preferences> {
             child: FlatButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              // onPressed: ,
+              onPressed: () => (
+                update()
+                // print(tags)
+              ),
               child: Text(
                 "Submit",
                 style: TextStyle(
